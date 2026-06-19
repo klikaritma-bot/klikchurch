@@ -127,18 +127,19 @@
   </div>
 
   <script>
-    // MASUKKAN URL DEPLOY /exec DARI APPS SCRIPT ANDA DI SINI
+    // 1. MASUKKAN URL DEPLOY /exec DARI APPS SCRIPT ANDA DI SINI
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbzbizDebSAcyFtfMkRRlIRllwvqcwHFHZMvHqPkZpZK9Aru4DL37goxOT4NckLx5a2H/exec';
     
     var globalSession = null;
     var appData = {};
     var currentView = 'dashboard';
 
-    // Handler Komunikasi Fetch API ke GAS
+    // 2. MESIN PENGHUBUNG KE SERVER GOOGLE (VERCEL READY)
     async function callAPI(action, payload) {
       try {
         let response = await fetch(GAS_URL, {
-          redirect: "follow", method: 'POST',
+          redirect: "follow", 
+          method: 'POST',
           headers: { "Content-Type": "text/plain;charset=utf-8" },
           body: JSON.stringify({ action: action, payload: payload })
         });
@@ -146,92 +147,193 @@
       } catch (e) { throw new Error("Koneksi API Gagal: " + e.message); }
     }
 
+    // 3. FUNGSI LOGIN MULTI-TENANT
     async function loginKlik() {
       var email = document.getElementById('logEmail').value.trim();
       var pass = document.getElementById('logPass').value.trim();
       var btn = document.getElementById('btnLogin');
-      if (!email || !pass) { alert('Wajib diisi!'); return; }
+      
+      if (!email || !pass) { alert('Email dan Password wajib diisi!'); return; }
+      
       btn.innerText = "⏳ MEMERIKSA..."; btn.disabled = true;
 
       try {
         let res = await callAPI('login', { email: email, pass: pass });
         btn.innerText = "MASUK SISTEM"; btn.disabled = false;
+        
         if (res.success) {
           globalSession = res.user;
+          try { localStorage.setItem('klik_session', JSON.stringify(globalSession)); } catch(err){}
           initApp();
         } else { alert(res.message); }
-      } catch (err) { btn.innerText = "MASUK SISTEM"; btn.disabled = false; alert(err.message); }
+      } catch (err) { 
+        btn.innerText = "MASUK SISTEM"; btn.disabled = false; 
+        alert(err.message); 
+      }
     }
+
+    // 4. INISIALISASI APLIKASI
+    document.addEventListener("DOMContentLoaded", function() {
+      try {
+        var saved = localStorage.getItem('klik_session');
+        if (saved) { globalSession = JSON.parse(saved); initApp(); return; }
+      } catch(e) {}
+    });
 
     function initApp() {
       document.getElementById('auth-screen').style.display = 'none';
       document.getElementById('app-screen').style.display = 'block';
-      document.getElementById('body-main').classList.remove('login-body');
-      document.getElementById('userNameDisplay').innerText = globalSession.name;
+      
+      let loginBody = document.getElementById('body-main');
+      if(loginBody) loginBody.classList.remove('login-body');
+      
+      let userNameDisplay = document.getElementById('userNameDisplay');
+      if(userNameDisplay && globalSession) userNameDisplay.innerText = globalSession.name;
+      
       switchView('dashboard', document.querySelector('.nav-link.active'));
     }
 
-    async function refreshData() {
-      if(!globalSession) return;
-      try {
-        let stats = await callAPI('getDashboardStats', { tenantId: globalSession.tenantId, userId: globalSession.userId, role: globalSession.role });
-        if(stats) {
-          var fRp = function(num) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(num); };
-          document.getElementById('statMasuk').innerText = fRp(stats.keuangan.masuk);
-          document.getElementById('statKeluar').innerText = fRp(stats.keuangan.keluar);
-          document.getElementById('statSaldo').innerText = fRp(stats.keuangan.saldo);
-          document.getElementById('statTotalJemaat').innerText = stats.jemaat.total;
-          document.getElementById('statTotalAnak').innerText = stats.anak.total;
-          document.getElementById('statJoy').innerText = stats.anak.joy;
-        }
-        let data = await callAPI('getAllData', { tenantId: globalSession.tenantId, userId: globalSession.userId, role: globalSession.role });
-        if(data) { appData = data; renderManageAkun(); if(currentView.startsWith('table-')) renderTabelGenerik(currentView.replace('table-', '')); }
-      } catch (err) { console.error(err); }
+    function handleLogout() { 
+      try { localStorage.removeItem('klik_session'); } catch(e){}
+      location.reload(); 
     }
 
     function switchView(route, element, title) {
       currentView = route;
       document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
       if(element) element.classList.add('active');
+      
       document.querySelectorAll('.app-view').forEach(v => v.style.display = 'none');
-      if(document.getElementById('view-' + route)) document.getElementById('view-' + route).style.display = 'block';
+      var target = document.getElementById('view-' + route);
+      if(target) target.style.display = 'block';
+
       if(route === 'dashboard') refreshData();
+      
       if(route.startsWith('table-')) {
-        document.getElementById('view-table-generic').style.display = 'block';
-        document.getElementById('tableTitleGeneric').innerText = title;
+        let tableContainer = document.getElementById('view-table-generic');
+        let titleEl = document.getElementById('tableTitleGeneric');
+        if(tableContainer) tableContainer.style.display = 'block';
+        if(titleEl) titleEl.innerText = title || "Data";
         renderTabelGenerik(route.replace('table-', ''));
       }
     }
 
+    // 5. TARIK DATA DARI SERVER
+    async function refreshData() {
+      if(!globalSession) return;
+      try {
+        let stats = await callAPI('getDashboardStats', { tenantId: globalSession.tenantId, userId: globalSession.userId, role: globalSession.role });
+        if(stats) {
+          var fRp = function(num) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(num); };
+          if(document.getElementById('statMasuk')) document.getElementById('statMasuk').innerText = fRp(stats.keuangan.masuk);
+          if(document.getElementById('statKeluar')) document.getElementById('statKeluar').innerText = fRp(stats.keuangan.keluar);
+          if(document.getElementById('statSaldo')) document.getElementById('statSaldo').innerText = fRp(stats.keuangan.saldo);
+          if(document.getElementById('statTotalJemaat')) document.getElementById('statTotalJemaat').innerText = stats.jemaat.total;
+          if(document.getElementById('statTotalAnak')) document.getElementById('statTotalAnak').innerText = stats.anak.total;
+          if(document.getElementById('statJoy')) document.getElementById('statJoy').innerText = stats.anak.joy;
+          
+          if(document.getElementById('listUltahJemaat')) {
+            document.getElementById('listUltahJemaat').innerHTML = (stats.jemaat.ultah && stats.jemaat.ultah.length > 0) 
+                ? stats.jemaat.ultah.map(a => `<div class='mb-2 border-bottom pb-1' style='font-size:14px'><strong>${a.nama}</strong> (Tgl ${a.tanggal})</div>`).join('') 
+                : "<p class='text-muted small'>Tidak ada data ulang tahun.</p>";
+          }
+          if(document.getElementById('listUltahAnak')) {
+            document.getElementById('listUltahAnak').innerHTML = (stats.anak.ultah && stats.anak.ultah.length > 0)
+                ? stats.anak.ultah.map(a => `<div class='mb-2 border-bottom pb-1' style='font-size:14px'><strong>${a.nama}</strong> (Tgl ${a.tanggal})</div>`).join('') 
+                : "<p class='text-muted small'>Tidak ada data ulang tahun.</p>";
+          }
+        }
+
+        let data = await callAPI('getAllData', { tenantId: globalSession.tenantId, userId: globalSession.userId, role: globalSession.role });
+        if(data) { 
+          appData = data; 
+          populateDropdownAnak();
+          renderManageAkun();
+          if(currentView && currentView.startsWith('table-')) renderTabelGenerik(currentView.replace('table-', ''));
+        }
+      } catch (err) { console.error(err); }
+    }
+
+    // 6. SIMPAN DATA KE SERVER
     async function simpanDataPasti(sheetName, alertId, btnId, containerId) {
       const btn = document.getElementById(btnId); let originalText = btn.innerText;
       btn.innerText = "⏳ Menyimpan..."; btn.disabled = true;
+      
       let payload = { id: "" };
       document.getElementById(containerId).querySelectorAll('input, select').forEach(el => {
-         if(el.id && el.id.indexOf(sheetName + '_') === 0) { payload[el.id.replace(sheetName + '_', '').toLowerCase()] = el.value; el.value = ""; }
+         if(el.id && el.id.indexOf(sheetName + '_') === 0) { 
+            payload[el.id.replace(sheetName + '_', '').toLowerCase()] = el.value; 
+            el.value = ""; 
+         }
       });
+
       try {
         let newData = await callAPI('saveData', { sheetName: sheetName, data: payload, tenantId: globalSession.tenantId, userId: globalSession.userId, role: globalSession.role });
         appData = newData; refreshData(); btn.innerText = "SIMPAN BERHASIL";
         document.getElementById(alertId).innerHTML = "<div class='alert alert-success fw-bold py-2 mb-3'>✅ Berhasil tersimpan!</div>";
         setTimeout(() => { document.getElementById(alertId).innerHTML = ""; btn.innerText = originalText; btn.disabled = false; }, 3000);
-      } catch (err) { document.getElementById(alertId).innerHTML = "<div class='alert alert-danger py-2 mb-3'>❌ Gagal: " + err.message + "</div>"; btn.innerText = originalText; btn.disabled = false; }
+      } catch (err) { 
+        document.getElementById(alertId).innerHTML = "<div class='alert alert-danger py-2 mb-3'>❌ Gagal: " + err.message + "</div>"; 
+        btn.innerText = originalText; btn.disabled = false; 
+      }
+    }
+
+    // 7. FUNGSI PENDUKUNG UI
+    function populateDropdownAnak() {
+      let dataAnak = appData['DB_MASTER_ANAK'] || [];
+      let html = "<option value=''>-- Pilih Anak --</option>";
+      dataAnak.forEach(a => { html += `<option value="${a.nama_lengkap_anak}">${a.nama_lengkap_anak} (${a.kelas})</option>`; });
+      document.querySelectorAll('.select-anak').forEach(el => el.innerHTML = html);
+    }
+
+    function autoFillKelas(namaAnak, targetId) {
+       let dataAnak = appData['DB_MASTER_ANAK'] || [];
+       let anak = dataAnak.find(a => a.nama_lengkap_anak === namaAnak);
+       if(anak && document.getElementById(targetId)) document.getElementById(targetId).value = anak.kelas;
+    }
+
+    function filterLaporan() {
+      let bln = document.getElementById('lapBulan').value;
+      let thn = document.getElementById('lapTahun').value;
+      let data = appData['Transactions'] || [];
+      
+      let filterData = data.filter(r => { let tgl = new Date(r.tanggal_transaksi); return (tgl.getMonth() + 1) == bln && tgl.getFullYear() == thn; });
+      let tbody = document.getElementById('lapTableBody');
+      if(filterData.length === 0) { tbody.innerHTML = "<tr><td colspan='5' class='text-center py-3'>Tidak ada transaksi.</td></tr>"; document.getElementById('lapRingkasan').style.display='none'; return;}
+
+      let masuk=0, keluar=0, html="";
+      const fRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(num);
+
+      filterData.forEach(r => {
+        let nom = Number(r.nominal)||0; let isMasuk = String(r.jenis_transaksi).toLowerCase().includes('masuk');
+        if(isMasuk) masuk += nom; else keluar += nom;
+        html += `<tr><td>${r.tanggal_transaksi}</td><td class='fw-bold'>${r.kategori_akun}</td><td>${r.keterangan}</td><td class='fw-bold ${isMasuk?'text-success':'text-danger'}'>${fRp(nom)}</td><td><span class='badge ${isMasuk?'bg-success':'bg-danger'}'>${r.jenis_transaksi}</span></td></tr>`;
+      });
+      tbody.innerHTML = html; 
+      let lapRingkasan = document.getElementById('lapRingkasan');
+      if(lapRingkasan) lapRingkasan.style.display = 'flex'; 
+      document.getElementById('lapMasuk').innerText = fRp(masuk); document.getElementById('lapKeluar').innerText = fRp(keluar); document.getElementById('lapSaldo').innerText = fRp(masuk-keluar);
     }
 
     function renderTabelGenerik(sheet) {
       let data = appData[sheet] || [];
       let head = document.getElementById('tableHeadGeneric'); let body = document.getElementById('tableBodyGeneric');
-      if(data.length === 0) { head.innerHTML=""; body.innerHTML="<tr><td class='p-4'>Belum ada data.</td></tr>"; return; }
+      if(!head || !body) return;
+      
+      if(data.length === 0) { head.innerHTML=""; body.innerHTML="<tr><td class='p-4 text-center'>Belum ada data.</td></tr>"; return; }
+      
       let keys = sheet === 'DB_Anggota' ? ['id', 'nama_lengkap', 'no_hp_whatsapp', 'nama_komsel'] : ['id', 'nama_lengkap_anak', 'kelas', 'nama_orang_tua'];
-      head.innerHTML = "<tr class='table-dark'>" + keys.map(k => `<th>${k.toUpperCase()}</th>`).join('') + "</tr>";
-      body.innerHTML = data.map(r => "tr" + keys.map(k => `<td>${r[k]||'-'}</td>`).join('') + "/tr").replace(/tr/g, '<tr\>').replace(/\/tr/g, '</tr\>');
+      let labels = sheet === 'DB_Anggota' ? ['ID', 'Nama', 'WhatsApp', 'Komsel'] : ['ID', 'Nama Anak', 'Kelas', 'Orang Tua'];
+      
+      head.innerHTML = "<tr class='table-dark'>" + labels.map(l => `<th>${l}</th>`).join('') + "</tr>";
+      body.innerHTML = data.map(r => "<tr>" + keys.map(k => `<td>${r[k]||'-'}</td>`).join('') + "</tr>").join('');
     }
 
     function renderManageAkun() {
       let data = appData['Users'] || [];
-      document.getElementById('userTableBody').innerHTML = data.map(r => `<tr><td>${r.name}</td><td>${r.email}</td><td>${r.role}</td></tr>`).join('');
+      let tbody = document.getElementById('userTableBody');
+      if(tbody) tbody.innerHTML = data.map(r => `<tr><td>${r.name}</td><td>${r.email}</td><td>${r.role}</td></tr>`).join('');
     }
-    function handleLogout() { location.reload(); }
   </script>
 </body>
 </html>

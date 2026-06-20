@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Church Starter Kit - SaaS</title>
+  <title>CHURCHKIT - Sistem Manajemen</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -71,6 +71,7 @@
 </head>
 <body id="body-main" class="login-body">
 
+  <!-- LAYAR LOGIN & REGISTER -->
   <div id="auth-screen">
     <div class="login-card">
       <h2>CHURCHKIT</h2>
@@ -93,13 +94,16 @@
     </div>
   </div>
 
+  <!-- HEADER KHUSUS MOBILE (HAMBURGER MENU) -->
   <div class="mobile-header" id="mobileHeader">
     <h4>CHURCHKIT</h4>
     <button class="hamburger-btn" onclick="toggleMobileSidebar()">☰</button>
   </div>
   <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar()"></div>
 
+  <!-- LAYAR APLIKASI UTAMA -->
   <div id="app-screen" class="screen w-100">
+    <!-- SIDEBAR -->
     <div class="sidebar" id="mainSidebar">
       <div class="sidebar-header"><div class="sidebar-brand">CHURCHKIT</div></div>
       <div class="login-info">
@@ -109,23 +113,30 @@
 
       <div class="sidebar-section">Utama</div>
       <a class="nav-link active" onclick="switchView('dashboard', this)">📊 Dashboard Pusat</a>
+      
       <div class="sidebar-section">Database Jemaat</div>
       <a class="nav-link" onclick="switchView('table-DB_Anggota', this, 'Data Jemaat')">👥 Data Jemaat</a>
       <a class="nav-link" onclick="switchView('form-jemaat', this)">➕ Input Jemaat Baru</a>
+      
       <div class="sidebar-section">Keuangan Gereja</div>
       <a class="nav-link" onclick="switchView('form-kas', this)">💰 Pencatatan Kas</a>
       <a class="nav-link" onclick="switchView('laporan-kas', this)">📄 Laporan Bulanan</a>
+      
       <div class="sidebar-section">Sekolah Minggu</div>
       <a class="nav-link" onclick="switchView('table-DB_MASTER_ANAK', this, 'Direktori Anak')">👦 Direktori Anak</a>
       <a class="nav-link" onclick="switchView('form-anak', this)">➕ Registrasi Anak</a>
       <a class="nav-link" onclick="switchView('form-absen', this)">📱 Portal Absensi</a>
       <a class="nav-link" onclick="switchView('form-raport', this)">📝 Evaluasi Guru</a>
+      
       <div class="sidebar-section">Pengaturan</div>
       <a class="nav-link" onclick="switchView('manage-user', this)">⚙️ Manage Akun</a>
       <a class="nav-link text-danger mt-3" onclick="handleLogout()">🚪 Keluar Sistem</a>
     </div>
 
+    <!-- MAIN CONTENT -->
     <div class="main-content">
+      
+      <!-- DASHBOARD -->
       <div id="view-dashboard" class="app-view">
         <h3 class="page-title">Dashboard Pusat</h3>
         <div class="row">
@@ -136,18 +147,19 @@
         <div class="row mt-2">
           <div class="col-md-6">
             <div class="stat-card border-blue"><div class="card-body d-flex justify-content-between align-items-center"><div><div class="stat-title">Total Jemaat</div><div class="stat-value" id="statTotalJemaat">0</div></div><div style="font-size: 30px;">👥</div></div></div>
-            <div class="stat-card"><div class="card-body"><div class="stat-title mb-3">🎂 Ulang Tahun Jemaat</div><div id="listUltahJemaat">Memuat...</div></div></div>
+            <div class="stat-card"><div class="card-body"><div class="stat-title mb-3">🎂 Ulang Tahun Jemaat (Bulan Ini)</div><div id="listUltahJemaat">Memuat...</div></div></div>
           </div>
           <div class="col-md-6">
             <div class="row">
               <div class="col-6"><div class="stat-card border-blue"><div class="card-body"><div class="stat-title">Total Anak</div><div class="stat-value" id="statTotalAnak">0</div></div></div></div>
               <div class="col-6"><div class="stat-card"><div class="card-body text-center"><small class="text-muted fw-bold">Joy</small><br><strong id="statJoy" style="font-size:24px;">0</strong></div></div></div>
             </div>
-            <div class="stat-card"><div class="card-body"><div class="stat-title mb-3">🎈 Ulang Tahun Anak</div><div id="listUltahAnak">Memuat...</div></div></div>
+            <div class="stat-card"><div class="card-body"><div class="stat-title mb-3">🎈 Ulang Tahun Anak (Bulan Ini)</div><div id="listUltahAnak">Memuat...</div></div></div>
           </div>
         </div>
       </div>
 
+      <!-- FORM INPUT JEMAAT -->
       <div id="view-form-jemaat" class="app-view" style="display: none;">
         <h3 class="page-title">Input Data Jemaat Baru</h3>
         <div class="custom-card">
@@ -155,59 +167,144 @@
           <div class="row" id="formAreaJemaat">
             <div class="col-md-6 mb-3"><label class="form-label">Nama Lengkap</label><input type="text" class="form-control-light" id="DB_Anggota_nama_lengkap"></div>
             <div class="col-md-6 mb-3"><label class="form-label">No WhatsApp</label><input type="text" class="form-control-light" id="DB_Anggota_no_hp_whatsapp"></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Tempat Lahir</label><input type="text" class="form-control-light" id="DB_Anggota_tempat_lahir"></div>
             <div class="col-md-6 mb-3"><label class="form-label">Tanggal Lahir</label><input type="date" class="form-control-light" id="DB_Anggota_tanggal_lahir"></div>
             <div class="col-md-6 mb-3"><label class="form-label">Jenis Kelamin</label><select class="form-control-light" id="DB_Anggota_jenis_kelamin"><option>Laki-laki</option><option>Perempuan</option></select></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Golongan Darah</label><select class="form-control-light" id="DB_Anggota_golongan_darah"><option>-</option><option>A</option><option>B</option><option>AB</option><option>O</option></select></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Status Pernikahan</label><select class="form-control-light" id="DB_Anggota_status_pernikahan"><option>Belum Menikah</option><option>Menikah</option><option>Janda/Duda</option></select></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Pekerjaan</label><input type="text" class="form-control-light" id="DB_Anggota_pekerjaan"></div>
             <div class="col-md-6 mb-3"><label class="form-label">Komsel</label><input type="text" class="form-control-light" id="DB_Anggota_nama_komsel"></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Keterangan Tambahan</label><input type="text" class="form-control-light" id="DB_Anggota_keterangan_tambahan"></div>
             <div class="col-12 mb-3"><label class="form-label">Alamat Lengkap</label><input type="text" class="form-control-light" id="DB_Anggota_alamat_lengkap"></div>
           </div>
-          <button class="btn btn-primary w-100 fw-bold" id="btnJemaat" onclick="simpanDataPasti('DB_Anggota', 'alertJemaat', 'btnJemaat', 'formAreaJemaat')">SIMPAN DATA JEMAAT</button>
+          <button class="btn btn-primary w-100 fw-bold mt-2" id="btnJemaat" onclick="simpanDataPasti('DB_Anggota', 'alertJemaat', 'btnJemaat', 'formAreaJemaat')">SIMPAN DATA JEMAAT</button>
         </div>
       </div>
 
+      <!-- FORM PENCATATAN KAS -->
       <div id="view-form-kas" class="app-view" style="display: none;">
-        <h3 class="page-title">Pencatatan Kas</h3>
+        <h3 class="page-title">Pencatatan Kas & Keuangan</h3>
         <div class="custom-card col-md-8">
           <div id="alertKas"></div>
           <div class="row" id="formAreaKas">
             <div class="col-md-6 mb-3"><label class="form-label">Jenis Transaksi</label><select class="form-control-light fw-bold" id="Transactions_jenis_transaksi" onchange="this.style.color = this.value=='Pemasukan'?'#10b981':'#ef4444'"><option value="Pemasukan" style="color:#10b981">Pemasukan</option><option value="Pengeluaran" style="color:#ef4444">Pengeluaran</option></select></div>
             <div class="col-md-6 mb-3"><label class="form-label">Tanggal Transaksi</label><input type="date" class="form-control-light" id="Transactions_tanggal_transaksi"></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Kategori Transaksi</label><input type="text" class="form-control-light" id="Transactions_kategori_akun" placeholder="Contoh: Persembahan Ibadah"></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Kategori Transaksi</label><select class="form-control-light" id="Transactions_kategori_akun"><option value="">-- Pilih Kategori --</option><option>Persembahan Ibadah</option><option>Persepuluhan</option><option>Ucapan Syukur</option><option>Diakonia</option><option>Operasional Gereja</option><option>Gaji/Honor</option><option>Pembangunan</option><option>Lain-lain</option></select></div>
             <div class="col-md-6 mb-3"><label class="form-label">Jumlah (Rp)</label><input type="number" class="form-control-light" id="Transactions_nominal"></div>
-            <div class="col-12 mb-3"><label class="form-label">Keterangan</label><input type="text" class="form-control-light" id="Transactions_keterangan"></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Petugas Kasir</label><input type="text" class="form-control-light" id="Transactions_petugas_kasir"></div>
+            <div class="col-12 mb-3"><label class="form-label">Keterangan Tambahan</label><input type="text" class="form-control-light" id="Transactions_keterangan"></div>
           </div>
           <button class="btn btn-primary w-100 fw-bold" id="btnKas" onclick="simpanDataPasti('Transactions', 'alertKas', 'btnKas', 'formAreaKas')">CATAT TRANSAKSI</button>
         </div>
       </div>
 
-      <div id="view-laporan-kas" class="app-view" style="display: none;"><h3 class="page-title">Laporan Kas</h3><div class="custom-card"><p>Aplikasi siap dijalankan.</p></div></div>
-      <div id="view-form-anak" class="app-view" style="display: none;"><h3 class="page-title">Form Anak</h3><div class="custom-card"><p>Aplikasi siap dijalankan.</p></div></div>
-      <div id="view-form-absen" class="app-view" style="display: none;"><h3 class="page-title">Absensi</h3><div class="custom-card"><p>Aplikasi siap dijalankan.</p></div></div>
-      <div id="view-form-raport" class="app-view" style="display: none;"><h3 class="page-title">Raport</h3><div class="custom-card"><p>Aplikasi siap dijalankan.</p></div></div>
-      <div id="view-cetak-raport" class="app-view" style="display: none;"><h3 class="page-title">Cetak Raport</h3><div class="custom-card"><p>Aplikasi siap dijalankan.</p></div></div>
-      <div id="view-manage-user" class="app-view" style="display: none;"><h3 class="page-title">Pengaturan Akun</h3><div class="custom-card"><p>Aplikasi siap dijalankan.</p></div></div>
-      
+      <!-- LAPORAN KAS -->
+      <div id="view-laporan-kas" class="app-view" style="display: none;">
+        <h3 class="page-title">Laporan Keuangan Bulanan</h3>
+        <div style="background:#1e293b; color:white; padding:20px; border-radius:12px; margin-bottom:20px;" class="row align-items-end">
+          <div class="col-md-4"><label class="form-label text-light">Pilih Bulan</label><select id="lapBulan" class="form-control-light"><option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option><option value="4">April</option><option value="5">Mei</option><option value="6">Juni</option><option value="7">Juli</option><option value="8">Agustus</option><option value="9">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option></select></div>
+          <div class="col-md-4"><label class="form-label text-light">Tahun</label><input type="number" id="lapTahun" class="form-control-light" value="2026"></div>
+          <div class="col-md-4"><button class="btn btn-warning w-100 fw-bold" onclick="filterLaporan()">Tampilkan Data</button></div>
+        </div>
+        <div class="row mb-3" id="lapRingkasan" style="display:none;">
+          <div class="col-4"><div class="p-3 border-radius-8 text-center text-white bg-success">Pemasukan<br><h4 id="lapMasuk">0</h4></div></div>
+          <div class="col-4"><div class="p-3 border-radius-8 text-center text-white bg-danger">Pengeluaran<br><h4 id="lapKeluar">0</h4></div></div>
+          <div class="col-4"><div class="p-3 border-radius-8 text-center text-white bg-primary">Saldo Bersih<br><h4 id="lapSaldo">0</h4></div></div>
+        </div>
+        <div class="custom-card p-0"><div class="table-responsive"><table class="table mb-0"><thead class="table-dark"><tr><th>Tanggal</th><th>Kategori</th><th>Keterangan</th><th>Jumlah</th><th>Tipe</th></tr></thead><tbody id="lapTableBody"><tr><td colspan='5' class='text-center py-3'>Gunakan filter di atas untuk melihat laporan.</td></tr></tbody></table></div></div>
+      </div>
+
+      <!-- FORM REGISTRASI ANAK -->
+      <div id="view-form-anak" class="app-view" style="display: none;">
+        <h3 class="page-title">Registrasi Anak Baru</h3>
+        <div class="custom-card">
+          <div id="alertAnak"></div>
+          <div class="row" id="formAreaAnak">
+            <div class="col-md-6 mb-3"><label class="form-label">Nama Lengkap Anak</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_nama_lengkap_anak"></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Nama Panggilan</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_nama_panggilan"></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Tempat Lahir</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_tempat_lahir"></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Tanggal Lahir</label><input type="date" class="form-control-light" id="DB_MASTER_ANAK_tanggal_lahir"></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Jenis Kelamin</label><select class="form-control-light" id="DB_MASTER_ANAK_jenis_kelamin"><option>Laki-laki</option><option>Perempuan</option></select></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Kelas Saat Ini</label><select class="form-control-light" id="DB_MASTER_ANAK_kelas"><option value="">-- Pilih Kelas --</option><option>Batita</option><option>Play Grup</option><option>TK</option><option>1 SD</option><option>2 SD</option><option>3 SD</option><option>4 SD</option><option>5 SD</option><option>6 SD</option><option>1 SMP</option><option>2 SMP</option><option>3 SMP</option></select></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Nama Orang Tua</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_nama_orang_tua"></div>
+            <div class="col-md-6 mb-3"><label class="form-label">No WA Orang Tua</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_no_wa_orang_tua"></div>
+            <div class="col-12 mb-3"><label class="form-label">Alamat Lengkap</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_alamat_lengkap"></div>
+            <div class="col-12 mb-3"><label class="form-label">Catatan Medis / Alergi</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_catatan_medis"></div>
+          </div>
+          <button class="btn btn-primary w-100 fw-bold mt-2" id="btnAnak" onclick="simpanDataPasti('DB_MASTER_ANAK', 'alertAnak', 'btnAnak', 'formAreaAnak')">REGISTRASI ANAK</button>
+        </div>
+      </div>
+
+      <!-- FORM ABSENSI ANAK -->
+      <div id="view-form-absen" class="app-view" style="display: none;">
+        <h3 class="page-title">Pencatatan Kehadiran Anak</h3>
+        <div class="custom-card col-md-8 text-center">
+          <div id="alertAbsen"></div>
+          <div id="formAreaAbsen">
+            <div class="mb-3 text-start"><label class="form-label">Tanggal Ibadah</label><input type="date" class="form-control-light" id="DB_TRANSAKSI_ABSEN_tanggal_ibadah"></div>
+            <div class="mb-3 text-start"><label class="form-label">Pilih Anak</label><select class="form-control-light select-anak" id="DB_TRANSAKSI_ABSEN_nama_anak" onchange="autoFillKelas(this.value, 'DB_TRANSAKSI_ABSEN_kelas')"></select></div>
+            <input type="hidden" id="DB_TRANSAKSI_ABSEN_kelas">
+            <div class="mb-3 text-start"><label class="form-label">Status Kehadiran</label><select class="form-control-light" id="DB_TRANSAKSI_ABSEN_status_kehadiran"><option>Hadir</option><option>Sakit</option><option>Izin</option><option>Alpa</option></select></div>
+            <div class="mb-3 text-start"><label class="form-label">Catatan Guru (Opsional)</label><input type="text" class="form-control-light" id="DB_TRANSAKSI_ABSEN_catatan_guru"></div>
+          </div>
+          <button class="btn btn-success w-100 fw-bold" id="btnAbsen" onclick="simpanDataPasti('DB_TRANSAKSI_ABSEN', 'alertAbsen', 'btnAbsen', 'formAreaAbsen')">CATAT KEHADIRAN</button>
+        </div>
+      </div>
+
+      <!-- FORM EVALUASI GURU -->
+      <div id="view-form-raport" class="app-view" style="display: none;">
+        <h3 class="page-title">Input Evaluasi Caturwulan</h3>
+        <div class="custom-card">
+          <div id="alertRaport"></div>
+          <div class="row" id="formAreaRaport">
+            <div class="col-md-6 mb-3"><label class="form-label">Pilih Anak</label><select class="form-control-light select-anak" id="DB_EVALUASI_RAPORT_nama_anak" onchange="autoFillKelas(this.value, 'DB_EVALUASI_RAPORT_kelas')"></select></div>
+            <input type="hidden" id="DB_EVALUASI_RAPORT_kelas">
+            <div class="col-md-6 mb-3"><label class="form-label">Periode</label><input type="text" class="form-control-light" id="DB_EVALUASI_RAPORT_periode" placeholder="Contoh: Caturwulan 1 - 2026"></div>
+            <div class="col-md-3 mb-3"><label class="form-label">Nilai Kehadiran</label><select class="form-control-light" id="DB_EVALUASI_RAPORT_nilai_kehadiran"><option>A - Sangat Baik</option><option>B - Baik</option><option>C - Cukup</option><option>D - Kurang</option></select></div>
+            <div class="col-md-3 mb-3"><label class="form-label">Nilai Sikap</label><select class="form-control-light" id="DB_EVALUASI_RAPORT_nilai_sikap"><option>A - Sangat Baik</option><option>B - Baik</option><option>C - Cukup</option><option>D - Kurang</option></select></div>
+            <div class="col-md-3 mb-3"><label class="form-label">Nilai Pemahaman</label><select class="form-control-light" id="DB_EVALUASI_RAPORT_nilai_pemahaman"><option>A - Sangat Baik</option><option>B - Baik</option><option>C - Cukup</option><option>D - Kurang</option></select></div>
+            <div class="col-md-3 mb-3"><label class="form-label">Hafalan Ayat</label><select class="form-control-light" id="DB_EVALUASI_RAPORT_hafalan_ayat"><option>A - Sangat Baik</option><option>B - Baik</option><option>C - Cukup</option><option>D - Kurang</option></select></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Nama Guru Penilai</label><input type="text" class="form-control-light" id="DB_EVALUASI_RAPORT_nama_guru_penilai"></div>
+            <div class="col-12 mb-3"><label class="form-label">Catatan Pertumbuhan</label><input type="text" class="form-control-light" id="DB_EVALUASI_RAPORT_catatan_pertumbuhan"></div>
+          </div>
+          <button class="btn btn-primary w-100 fw-bold mt-2" id="btnRaport" onclick="simpanDataPasti('DB_EVALUASI_RAPORT', 'alertRaport', 'btnRaport', 'formAreaRaport')">SIMPAN EVALUASI</button>
+        </div>
+      </div>
+
+      <!-- MANAGE AKUN & TABEL GENERIK -->
+      <div id="view-manage-user" class="app-view" style="display: none;">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h3 class="page-title m-0">Pengaturan Akun Pengguna</h3>
+            <button class="btn btn-primary fw-bold" onclick="alert('Fitur tambah user dari frontend akan segera tersedia')">+ Tambah User</button>
+        </div>
+        <div class="custom-card p-0"><div class="table-responsive"><table class="table mb-0"><thead class="table-dark"><tr><th>Nama</th><th>Email</th><th>Role</th></tr></thead><tbody id="userTableBody"></tbody></table></div></div>
+      </div>
+
       <div id="view-table-generic" class="app-view" style="display: none;">
         <h3 class="page-title" id="tableTitleGeneric">Data Modul</h3>
         <div class="custom-card p-0 overflow-hidden"><div class="table-responsive"><table class="table mb-0"><thead id="tableHeadGeneric"></thead><tbody id="tableBodyGeneric"></tbody></table></div></div>
       </div>
+
     </div>
   </div>
 
   <script>
-    // 1. GANTI DENGAN URL DEPLOY /EXEC DARI APPS SCRIPT
+    // ==============================================================
+    // WAJIB GANTI DENGAN URL DEPLOY /EXEC DARI APPS SCRIPT ANDA
+    // ==============================================================
     const GAS_URL = 'https://script.google.com/macros/s/AKfycbxFgOg_QJqPu8kSQeLsmM5N4Tjuz5qa5cUn0ce2yj-PAnqqpaR_K0hP9OyPcbSbaXWl/exec';
     
     var globalSession = null;
     var appData = {};
     var currentView = 'dashboard';
 
-    // SISTEM MENU MOBILE TAMPIL/SEMBUNYI
+    // MOBILE SIDEBAR TOGGLE
     function toggleMobileSidebar() {
       document.getElementById('mainSidebar').classList.toggle('open');
       document.getElementById('sidebarOverlay').classList.toggle('open');
     }
 
-    // TOGGLE LAYAR LOGIN & REGISTER
+    // AUTH VIEW TOGGLE
     function toggleAuthView(view) {
       if (view === 'register') {
         document.getElementById('loginFormArea').style.display = 'none';
@@ -218,6 +315,7 @@
       }
     }
 
+    // CALL API (FETCH VERCEL)
     async function callAPI(action, payload) {
       try {
         let response = await fetch(GAS_URL, {
@@ -229,7 +327,7 @@
       } catch (e) { throw new Error("Koneksi API Gagal: " + e.message); }
     }
 
-    // FUNGSI REGISTER KLIEN BARU
+    // FUNGSI DAFTAR
     async function registerKlik() {
       var nama = document.getElementById('regNama').value.trim();
       var email = document.getElementById('regEmail').value.trim();
@@ -237,7 +335,6 @@
       var btn = document.getElementById('btnRegister');
 
       if (!nama || !email || !pass) { alert('Semua kolom wajib diisi!'); return; }
-      
       btn.innerText = "⏳ MEMPROSES..."; btn.disabled = true;
 
       try {
@@ -251,7 +348,7 @@
       } catch (err) { btn.innerText = "DAFTAR TRIAL SEKARANG"; btn.disabled = false; alert(err.message); }
     }
 
-    // FUNGSI LOGIN DENGAN VALIDASI TRIAL
+    // FUNGSI LOGIN
     async function loginKlik() {
       var email = document.getElementById('logEmail').value.trim();
       var pass = document.getElementById('logPass').value.trim();
@@ -267,10 +364,7 @@
           globalSession = res.user;
           try { localStorage.setItem('klik_session', JSON.stringify(globalSession)); } catch(e){}
           initApp();
-        } else { 
-          // Pesan Error Jika Masa Trial Habis akan Muncul di Sini
-          Swal.fire('Akses Ditolak', res.message, 'error'); 
-        }
+        } else { Swal.fire('Akses Ditolak', res.message, 'error'); }
       } catch (err) { btn.innerText = "MASUK SISTEM"; btn.disabled = false; alert(err.message); }
     }
 
@@ -281,21 +375,22 @@
       } catch(e) {}
     });
 
+    // INIT APLIKASI
     function initApp() {
       document.getElementById('auth-screen').style.display = 'none';
       document.getElementById('app-screen').style.display = 'block';
       document.getElementById('body-main').classList.remove('login-body');
       
-      // Munculkan mobile header saat login sukses
       document.getElementById('mobileHeader').style.display = window.innerWidth <= 768 ? 'flex' : 'none';
-      window.addEventListener('resize', () => {
-        document.getElementById('mobileHeader').style.display = window.innerWidth <= 768 ? 'flex' : 'none';
-      });
+      window.addEventListener('resize', () => { document.getElementById('mobileHeader').style.display = window.innerWidth <= 768 ? 'flex' : 'none'; });
 
       document.getElementById('userNameDisplay').innerText = globalSession.name;
       switchView('dashboard', document.querySelector('.nav-link.active'));
     }
 
+    function handleLogout() { try { localStorage.removeItem('klik_session'); } catch(e){} location.reload(); }
+
+    // NAVIGASI MENU
     function switchView(route, element, title) {
       currentView = route;
       document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
@@ -303,7 +398,6 @@
       document.querySelectorAll('.app-view').forEach(v => v.style.display = 'none');
       if(document.getElementById('view-' + route)) document.getElementById('view-' + route).style.display = 'block';
       
-      // Tutup menu di mode mobile setiap klik menu
       document.getElementById('mainSidebar').classList.remove('open');
       document.getElementById('sidebarOverlay').classList.remove('open');
 
@@ -315,26 +409,26 @@
       }
     }
 
-    function handleLogout() { try { localStorage.removeItem('klik_session'); } catch(e){} location.reload(); }
-
+    // TARIK DATA
     async function refreshData() {
       if(!globalSession) return;
       try {
         let stats = await callAPI('getDashboardStats', { tenantId: globalSession.tenantId, userId: globalSession.userId, role: globalSession.role });
         if(stats) {
           var fRp = function(num) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(num); };
-          document.getElementById('statMasuk').innerText = fRp(stats.keuangan.masuk);
-          document.getElementById('statKeluar').innerText = fRp(stats.keuangan.keluar);
-          document.getElementById('statSaldo').innerText = fRp(stats.keuangan.saldo);
-          document.getElementById('statTotalJemaat').innerText = stats.jemaat.total;
-          document.getElementById('statTotalAnak').innerText = stats.anak.total;
-          document.getElementById('statJoy').innerText = stats.anak.joy;
+          if(document.getElementById('statMasuk')) document.getElementById('statMasuk').innerText = fRp(stats.keuangan.masuk);
+          if(document.getElementById('statKeluar')) document.getElementById('statKeluar').innerText = fRp(stats.keuangan.keluar);
+          if(document.getElementById('statSaldo')) document.getElementById('statSaldo').innerText = fRp(stats.keuangan.saldo);
+          if(document.getElementById('statTotalJemaat')) document.getElementById('statTotalJemaat').innerText = stats.jemaat.total;
+          if(document.getElementById('statTotalAnak')) document.getElementById('statTotalAnak').innerText = stats.anak.total;
+          if(document.getElementById('statJoy')) document.getElementById('statJoy').innerText = stats.anak.joy;
         }
         let data = await callAPI('getAllData', { tenantId: globalSession.tenantId, userId: globalSession.userId, role: globalSession.role });
-        if(data) { appData = data; if(currentView.startsWith('table-')) renderTabelGenerik(currentView.replace('table-', '')); }
+        if(data) { appData = data; populateDropdownAnak(); renderManageAkun(); if(currentView.startsWith('table-')) renderTabelGenerik(currentView.replace('table-', '')); }
       } catch (err) { console.error(err); }
     }
 
+    // SIMPAN DATA
     async function simpanDataPasti(sheetName, alertId, btnId, containerId) {
       const btn = document.getElementById(btnId); let originalText = btn.innerText;
       btn.innerText = "⏳ Menyimpan..."; btn.disabled = true;
@@ -350,13 +444,46 @@
       } catch (err) { document.getElementById(alertId).innerHTML = "<div class='alert alert-danger py-2 mb-3'>❌ Gagal: " + err.message + "</div>"; btn.innerText = originalText; btn.disabled = false; }
     }
 
+    // FUNGSI BANTUAN UI
+    function populateDropdownAnak() {
+      let dataAnak = appData['DB_MASTER_ANAK'] || [];
+      let html = "<option value=''>-- Pilih Anak --</option>";
+      dataAnak.forEach(a => { html += `<option value="${a.nama_lengkap_anak}">${a.nama_lengkap_anak} (${a.kelas})</option>`; });
+      document.querySelectorAll('.select-anak').forEach(el => el.innerHTML = html);
+    }
+    function autoFillKelas(namaAnak, targetId) {
+       let dataAnak = appData['DB_MASTER_ANAK'] || [];
+       let anak = dataAnak.find(a => a.nama_lengkap_anak === namaAnak);
+       if(anak && document.getElementById(targetId)) document.getElementById(targetId).value = anak.kelas;
+    }
+    function filterLaporan() {
+      let bln = document.getElementById('lapBulan').value;
+      let thn = document.getElementById('lapTahun').value;
+      let data = appData['Transactions'] || [];
+      let filterData = data.filter(r => { let tgl = new Date(r.tanggal_transaksi); return (tgl.getMonth() + 1) == bln && tgl.getFullYear() == thn; });
+      let tbody = document.getElementById('lapTableBody');
+      if(filterData.length === 0) { tbody.innerHTML = "<tr><td colspan='5' class='text-center py-3'>Tidak ada transaksi.</td></tr>"; document.getElementById('lapRingkasan').style.display='none'; return;}
+      let masuk=0, keluar=0, html=""; const fRp = (num) => new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(num);
+      filterData.forEach(r => {
+        let nom = Number(r.nominal)||0; let isMasuk = String(r.jenis_transaksi).toLowerCase().includes('masuk');
+        if(isMasuk) masuk += nom; else keluar += nom;
+        html += `<tr><td>${r.tanggal_transaksi}</td><td class='fw-bold'>${r.kategori_akun}</td><td>${r.keterangan}</td><td class='fw-bold ${isMasuk?'text-success':'text-danger'}'>${fRp(nom)}</td><td><span class='badge ${isMasuk?'bg-success':'bg-danger'}'>${r.jenis_transaksi}</span></td></tr>`;
+      });
+      tbody.innerHTML = html; document.getElementById('lapRingkasan').style.display = 'flex'; 
+      document.getElementById('lapMasuk').innerHTML = fRp(masuk); document.getElementById('lapKeluar').innerHTML = fRp(keluar); document.getElementById('lapSaldo').innerHTML = fRp(masuk-keluar);
+    }
     function renderTabelGenerik(sheet) {
       let data = appData[sheet] || [];
       let head = document.getElementById('tableHeadGeneric'); let body = document.getElementById('tableBodyGeneric');
-      if(data.length === 0) { head.innerHTML=""; body.innerHTML="<tr><td class='p-4'>Belum ada data.</td></tr>"; return; }
+      if(data.length === 0) { head.innerHTML=""; body.innerHTML="<tr><td class='p-4 text-center'>Belum ada data.</td></tr>"; return; }
       let keys = sheet === 'DB_Anggota' ? ['id', 'nama_lengkap', 'no_hp_whatsapp', 'nama_komsel'] : ['id', 'nama_lengkap_anak', 'kelas', 'nama_orang_tua'];
-      head.innerHTML = "<tr class='table-dark'>" + keys.map(k => `<th>${k.toUpperCase()}</th>`).join('') + "</tr>";
-      body.innerHTML = data.map(r => "tr" + keys.map(k => `<td>${r[k]||'-'}</td>`).join('') + "/tr").replace(/tr/g, '<tr\>').replace(/\/tr/g, '</tr\>');
+      let labels = sheet === 'DB_Anggota' ? ['ID', 'Nama', 'WhatsApp', 'Komsel'] : ['ID', 'Nama Anak', 'Kelas', 'Orang Tua'];
+      head.innerHTML = "<tr class='table-dark'>" + labels.map(l => `<th>${l}</th>`).join('') + "</tr>";
+      body.innerHTML = data.map(r => "<tr>" + keys.map(k => `<td>${r[k]||'-'}</td>`).join('') + "</tr>").join('');
+    }
+    function renderManageAkun() {
+      let data = appData['Users'] || [];
+      document.getElementById('userTableBody').innerHTML = data.map(r => `<tr><td>${r.name}</td><td>${r.email}</td><td>${r.role}</td></tr>`).join('');
     }
   </script>
 </body>

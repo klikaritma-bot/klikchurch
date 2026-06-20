@@ -414,18 +414,47 @@
       if(!globalSession) return;
       try {
         let stats = await callAPI('getDashboardStats', { tenantId: globalSession.tenantId, userId: globalSession.userId, role: globalSession.role });
-        if(stats) {
-          var fRp = function(num) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(num); };
-          if(document.getElementById('statMasuk')) document.getElementById('statMasuk').innerText = fRp(stats.keuangan.masuk);
-          if(document.getElementById('statKeluar')) document.getElementById('statKeluar').innerText = fRp(stats.keuangan.keluar);
-          if(document.getElementById('statSaldo')) document.getElementById('statSaldo').innerText = fRp(stats.keuangan.saldo);
-          if(document.getElementById('statTotalJemaat')) document.getElementById('statTotalJemaat').innerText = stats.jemaat.total;
-          if(document.getElementById('statTotalAnak')) document.getElementById('statTotalAnak').innerText = stats.anak.total;
-          if(document.getElementById('statJoy')) document.getElementById('statJoy').innerText = stats.anak.joy;
+        
+        // Penanganan anti-loading terus-menerus jika data kosong dari server
+        if(!stats || !stats.jemaat) {
+           stats = { keuangan: {masuk:0, keluar:0, saldo:0}, jemaat: {total:0, ultah:[]}, anak: {total:0, joy:0, ultah:[]} };
         }
+
+        var fRp = function(num) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(num); };
+        if(document.getElementById('statMasuk')) document.getElementById('statMasuk').innerText = fRp(stats.keuangan.masuk);
+        if(document.getElementById('statKeluar')) document.getElementById('statKeluar').innerText = fRp(stats.keuangan.keluar);
+        if(document.getElementById('statSaldo')) document.getElementById('statSaldo').innerText = fRp(stats.keuangan.saldo);
+        if(document.getElementById('statTotalJemaat')) document.getElementById('statTotalJemaat').innerText = stats.jemaat.total;
+        if(document.getElementById('statTotalAnak')) document.getElementById('statTotalAnak').innerText = stats.anak.total;
+        if(document.getElementById('statJoy')) document.getElementById('statJoy').innerText = stats.anak.joy;
+        
+        // Eksekusi Ulang Tahun Jemaat (Berhenti memuat jika kosong)
+        if(document.getElementById('listUltahJemaat')) {
+          document.getElementById('listUltahJemaat').innerHTML = (stats.jemaat.ultah && stats.jemaat.ultah.length > 0) 
+              ? stats.jemaat.ultah.map(a => `<div class='mb-2 border-bottom pb-1' style='font-size:14px'><strong>${a.nama}</strong> (Tgl ${a.tanggal})</div>`).join('') 
+              : "<p class='text-muted small'>Tidak ada data ulang tahun bulan ini.</p>";
+        }
+        
+        // Eksekusi Ulang Tahun Anak (Berhenti memuat jika kosong)
+        if(document.getElementById('listUltahAnak')) {
+          document.getElementById('listUltahAnak').innerHTML = (stats.anak.ultah && stats.anak.ultah.length > 0)
+              ? stats.anak.ultah.map(a => `<div class='mb-2 border-bottom pb-1' style='font-size:14px'><strong>${a.nama}</strong> (Tgl ${a.tanggal})</div>`).join('') 
+              : "<p class='text-muted small'>Tidak ada data ulang tahun bulan ini.</p>";
+        }
+
         let data = await callAPI('getAllData', { tenantId: globalSession.tenantId, userId: globalSession.userId, role: globalSession.role });
-        if(data) { appData = data; populateDropdownAnak(); renderManageAkun(); if(currentView.startsWith('table-')) renderTabelGenerik(currentView.replace('table-', '')); }
-      } catch (err) { console.error(err); }
+        if(data) { 
+          appData = data; 
+          populateDropdownAnak(); 
+          renderManageAkun(); 
+          if(currentView && currentView.startsWith('table-')) renderTabelGenerik(currentView.replace('table-', '')); 
+        }
+      } catch (err) { 
+        console.error(err); 
+        // Jika koneksi putus, ubah teks memuat jadi pesan gagal
+        if(document.getElementById('listUltahJemaat')) document.getElementById('listUltahJemaat').innerHTML = "<p class='text-muted small'>Gagal memuat data.</p>";
+        if(document.getElementById('listUltahAnak')) document.getElementById('listUltahAnak').innerHTML = "<p class='text-muted small'>Gagal memuat data.</p>";
+      }
     }
 
     // SIMPAN DATA

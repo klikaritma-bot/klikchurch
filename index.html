@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Church Starter Kit - Vercel Ready</title>
+  <title>Church Starter Kit - SaaS</title>
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
   <link href="https://fonts.googleapis.com/css2?family=Urbanist:wght@400;700&family=Segoe+UI:wght@400;600&display=swap" rel="stylesheet">
   <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
@@ -11,26 +11,31 @@
     body { margin: 0; padding: 0; overflow-x: hidden; background-color: #f4f7f6; font-family: 'Segoe UI', sans-serif;}
     .screen { display: none; }
     
+    /* LOGIN & REGISTER SCREEN */
     .login-body { font-family: 'Urbanist', sans-serif; display: flex; justify-content: center; align-items: center; min-height: 100vh; width: 100%; margin: 0; background-color: #0f172a;}
-    #auth-screen { display: flex; justify-content: center; align-items: center; width: 100%; min-height: 100vh; }
-    
-    .login-card { background: #1e293b; padding: 40px; border-radius: 16px; width: 350px; text-align: center; border-bottom: 4px solid #d4af37; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
+    #auth-screen { display: flex; justify-content: center; align-items: center; width: 100%; min-height: 100vh; padding: 20px;}
+    .login-card { background: #1e293b; padding: 40px; border-radius: 16px; width: 100%; max-width: 380px; text-align: center; border-bottom: 4px solid #d4af37; box-shadow: 0 10px 25px rgba(0,0,0,0.5); }
     .login-card h2 { color: #d4af37; margin-bottom: 5px; font-weight: bold; }
+    
     .input-group-custom label { display: block; font-size: 12px; color: #cbd5e1; margin-bottom: 5px; font-weight: bold; text-align: left;}
     .input-group-custom input, .input-group-custom select { width: 100%; padding: 12px; border-radius: 8px; border: 1px solid #334155; background: #0f172a; color: white; margin-bottom: 15px; outline: none; box-sizing: border-box; }
     .input-group-custom input:focus, .input-group-custom select:focus { border-color: #d4af37; }
     .btn-gold { width: 100%; padding: 14px; background: #d4af37; color: #0f172a; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; transition: 0.3s; }
     .btn-gold:hover { background: #b8962e; }
+    .text-link { color: #d4af37; cursor: pointer; font-size: 13px; text-decoration: underline; }
 
-    .sidebar { position: fixed; top: 0; left: 0; width: 260px; height: 100vh; background-color: #0f172a; border-right: 1px solid #1e293b; color: #f8fafc; z-index: 1000; overflow-y: auto; box-shadow: 4px 0 15px rgba(0,0,0,0.3); }
+    /* DESKTOP SIDEBAR & MAIN CONTENT */
+    .sidebar { position: fixed; top: 0; left: 0; width: 260px; height: 100vh; background-color: #0f172a; border-right: 1px solid #1e293b; color: #f8fafc; z-index: 1050; overflow-y: auto; transition: 0.3s;}
+    .sidebar::-webkit-scrollbar { width: 6px; }
+    .sidebar::-webkit-scrollbar-thumb { background-color: #334155; border-radius: 10px; }
     .sidebar-header { text-align: center; padding: 25px 15px 15px 15px; border-bottom: 1px solid #1e293b; font-family: 'Urbanist', sans-serif;}
     .sidebar-brand { color: #d4af37; font-weight: bold; font-size: 18px; letter-spacing: 1px; }
-    .login-info { background:#1e293b; margin: 15px; padding: 15px; border-radius: 12px; text-align: center; border: 1px solid #334155; }
-    .nav-link { color: #cbd5e1; padding: 12px 20px; font-size: 14px; cursor: pointer; font-weight: 500; margin-bottom: 2px; transition: 0.3s; display: block; text-decoration: none;}
+    .login-info { background:#1e293b; margin: 15px; padding: 15px; border-radius: 12px; text-align: center; }
+    .nav-link { color: #cbd5e1; padding: 12px 20px; font-size: 14px; cursor: pointer; font-weight: 500; display: block; text-decoration: none;}
     .nav-link:hover, .nav-link.active { background-color: #1e293b; color: #d4af37; border-left: 3px solid #d4af37; }
     .sidebar-section { font-size: 11px; text-transform: uppercase; color: #64748b; font-weight: bold; margin: 20px 0 5px 20px; }
+    .main-content { margin-left: 260px; padding: 30px 40px; min-height: 100vh; width: calc(100% - 260px); box-sizing: border-box; transition: 0.3s;}
     
-    .main-content { margin-left: 260px; padding: 30px 40px; min-height: 100vh; width: calc(100% - 260px); background-color: #f4f7f6; box-sizing: border-box;}
     .page-title { color: #0f172a; font-weight: bold; margin-bottom: 20px; border-left: 5px solid #d4af37; padding-left: 10px; }
     .custom-card { border: none; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.05); background: white; padding: 30px; border-top: 4px solid #0f172a; margin-bottom: 20px;}
     .stat-card { border: none; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); margin-bottom: 20px; background: white; }
@@ -39,62 +44,82 @@
     .stat-value { font-size: 28px; font-weight: bold; color: #0f172a; }
     .border-gold { border-bottom: 4px solid #d4af37; } .border-blue { border-bottom: 4px solid #3b82f6; } .border-green { border-bottom: 4px solid #10b981; } .border-red { border-bottom: 4px solid #ef4444; }
     .section-label { font-size: 14px; font-weight: bold; color: #94a3b8; margin-top: 20px; margin-bottom: 10px; text-transform: uppercase; }
-    
-    .form-label { font-weight: 600; color: #334155; font-size: 13px; margin-bottom: 5px;}
     .form-control-light { border: 1px solid #cbd5e1; border-radius: 8px; padding: 10px; width: 100%; box-sizing: border-box;}
     .table thead th { background-color: #0f172a; color: #d4af37; font-weight: 600; border: none; font-size: 13px; }
     .table tbody td { font-size: 14px; vertical-align: middle; }
-    .summary-box { padding: 15px; border-radius: 8px; text-align: center; color: white; }
+
+    /* MOBILE RESPONSIVENESS FIX */
+    .mobile-header { display: none; }
+    .sidebar-overlay { display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.6); z-index: 1040; }
+    
+    @media (max-width: 768px) {
+      .sidebar { transform: translateX(-100%); }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.open { display: block; }
+      
+      .main-content { margin-left: 0; width: 100%; padding: 80px 20px 30px 20px; }
+      
+      .mobile-header { 
+        display: flex; justify-content: space-between; align-items: center; 
+        position: fixed; top: 0; left: 0; width: 100%; height: 60px; 
+        background-color: #0f172a; padding: 0 20px; z-index: 1030; box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+      }
+      .mobile-header h4 { color: #d4af37; margin: 0; font-weight: bold; font-family: 'Urbanist', sans-serif;}
+      .hamburger-btn { background: none; border: none; color: #f8fafc; font-size: 28px; cursor: pointer; }
+    }
   </style>
 </head>
 <body id="body-main" class="login-body">
 
   <div id="auth-screen">
     <div class="login-card">
-      <h2>CHURCH STARTER KIT</h2>
-      <p style="color:#94a3b8;">Manajemen Terintegrasi</p>
+      <h2>CHURCHKIT</h2>
+      <p style="color:#94a3b8;">Manajemen Gereja Era Digital</p>
+
       <div id="loginFormArea">
-        <div class="input-group-custom">
-          <label>Email Terdaftar</label>
-          <input type="email" id="logEmail" placeholder="Email akun..." onkeydown="if(event.key === 'Enter') loginKlik()">
-        </div>
-        <div class="input-group-custom">
-          <label>Password</label>
-          <input type="password" id="logPass" placeholder="Password akun..." onkeydown="if(event.key === 'Enter') loginKlik()">
-        </div>
+        <div class="input-group-custom"><label>Email</label><input type="email" id="logEmail" placeholder="Email Anda..." onkeydown="if(event.key==='Enter') loginKlik()"></div>
+        <div class="input-group-custom"><label>Password</label><input type="password" id="logPass" placeholder="Password..." onkeydown="if(event.key==='Enter') loginKlik()"></div>
         <button type="button" class="btn-gold" id="btnLogin" onclick="loginKlik()">MASUK SISTEM</button>
-        <p style="margin-top:15px; font-size:10px; color:#64748b;">(Gunakan email: <b>demo@gereja.com</b> dan pass: <b>admin123</b>)</p>
+        <p class="mt-4 mb-0" style="color:#94a3b8; font-size:12px;">Belum punya akun? <span class="text-link" onclick="toggleAuthView('register')">Coba Gratis 24 Jam</span></p>
+      </div>
+
+      <div id="registerFormArea" style="display: none;">
+        <div class="input-group-custom"><label>Nama Gereja / Instansi</label><input type="text" id="regNama" placeholder="Contoh: GBI Kasih..."></div>
+        <div class="input-group-custom"><label>Email Pendaftaran</label><input type="email" id="regEmail" placeholder="Email aktif..."></div>
+        <div class="input-group-custom"><label>Buat Password</label><input type="password" id="regPass" placeholder="Password baru..."></div>
+        <button type="button" class="btn-gold" id="btnRegister" onclick="registerKlik()">DAFTAR TRIAL SEKARANG</button>
+        <p class="mt-4 mb-0" style="color:#94a3b8; font-size:12px;">Sudah punya akun? <span class="text-link" onclick="toggleAuthView('login')">Masuk di sini</span></p>
       </div>
     </div>
   </div>
 
+  <div class="mobile-header" id="mobileHeader">
+    <h4>CHURCHKIT</h4>
+    <button class="hamburger-btn" onclick="toggleMobileSidebar()">☰</button>
+  </div>
+  <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleMobileSidebar()"></div>
+
   <div id="app-screen" class="screen w-100">
-    <div class="sidebar">
-      <div class="sidebar-header"><div class="sidebar-brand">CHURCHKIT<br><span>Manajemen Terintegrasi</span></div></div>
+    <div class="sidebar" id="mainSidebar">
+      <div class="sidebar-header"><div class="sidebar-brand">CHURCHKIT</div></div>
       <div class="login-info">
         <small style="color:#94a3b8; font-size:10px;">Login sebagai:</small><br>
-        <strong style="color:white; font-size:14px;" id="userNameDisplay">Admin Pusat</strong><br>
-        <span style="background:#10b981; color:white; font-size:10px; padding:2px 8px; border-radius:10px; margin-top:5px; display:inline-block;">Aktif</span>
+        <strong style="color:white; font-size:14px;" id="userNameDisplay">Admin</strong>
       </div>
 
       <div class="sidebar-section">Utama</div>
       <a class="nav-link active" onclick="switchView('dashboard', this)">📊 Dashboard Pusat</a>
-      
       <div class="sidebar-section">Database Jemaat</div>
       <a class="nav-link" onclick="switchView('table-DB_Anggota', this, 'Data Jemaat')">👥 Data Jemaat</a>
       <a class="nav-link" onclick="switchView('form-jemaat', this)">➕ Input Jemaat Baru</a>
-      
       <div class="sidebar-section">Keuangan Gereja</div>
       <a class="nav-link" onclick="switchView('form-kas', this)">💰 Pencatatan Kas</a>
       <a class="nav-link" onclick="switchView('laporan-kas', this)">📄 Laporan Bulanan</a>
-      
       <div class="sidebar-section">Sekolah Minggu</div>
       <a class="nav-link" onclick="switchView('table-DB_MASTER_ANAK', this, 'Direktori Anak')">👦 Direktori Anak</a>
       <a class="nav-link" onclick="switchView('form-anak', this)">➕ Registrasi Anak</a>
       <a class="nav-link" onclick="switchView('form-absen', this)">📱 Portal Absensi</a>
       <a class="nav-link" onclick="switchView('form-raport', this)">📝 Evaluasi Guru</a>
-      <a class="nav-link" onclick="switchView('cetak-raport', this)">🖨️ Cetak Raport PDF</a>
-      
       <div class="sidebar-section">Pengaturan</div>
       <a class="nav-link" onclick="switchView('manage-user', this)">⚙️ Manage Akun</a>
       <a class="nav-link text-danger mt-3" onclick="handleLogout()">🚪 Keluar Sistem</a>
@@ -103,7 +128,6 @@
     <div class="main-content">
       <div id="view-dashboard" class="app-view">
         <h3 class="page-title">Dashboard Pusat</h3>
-        <div class="section-label">Ringkasan Keuangan (Bulan Ini)</div>
         <div class="row">
           <div class="col-md-4"><div class="stat-card border-green"><div class="card-body"><div class="stat-title">Pemasukan Bulan Ini</div><div class="stat-value text-success" id="statMasuk">Rp 0</div></div></div></div>
           <div class="col-md-4"><div class="stat-card border-red"><div class="card-body"><div class="stat-title">Pengeluaran Bulan Ini</div><div class="stat-value text-danger" id="statKeluar">Rp 0</div></div></div></div>
@@ -111,17 +135,15 @@
         </div>
         <div class="row mt-2">
           <div class="col-md-6">
-            <div class="section-label">Database Jemaat</div>
             <div class="stat-card border-blue"><div class="card-body d-flex justify-content-between align-items-center"><div><div class="stat-title">Total Jemaat</div><div class="stat-value" id="statTotalJemaat">0</div></div><div style="font-size: 30px;">👥</div></div></div>
-            <div class="stat-card"><div class="card-body"><div class="stat-title mb-3">🎂 Ulang Tahun Jemaat (Bulan Ini)</div><div id="listUltahJemaat">Memuat...</div></div></div>
+            <div class="stat-card"><div class="card-body"><div class="stat-title mb-3">🎂 Ulang Tahun Jemaat</div><div id="listUltahJemaat">Memuat...</div></div></div>
           </div>
           <div class="col-md-6">
-            <div class="section-label">Sekolah Minggu</div>
             <div class="row">
               <div class="col-6"><div class="stat-card border-blue"><div class="card-body"><div class="stat-title">Total Anak</div><div class="stat-value" id="statTotalAnak">0</div></div></div></div>
               <div class="col-6"><div class="stat-card"><div class="card-body text-center"><small class="text-muted fw-bold">Joy</small><br><strong id="statJoy" style="font-size:24px;">0</strong></div></div></div>
             </div>
-            <div class="stat-card"><div class="card-body"><div class="stat-title mb-3">🎈 Ulang Tahun Anak (Bulan Ini)</div><div id="listUltahAnak">Memuat...</div></div></div>
+            <div class="stat-card"><div class="card-body"><div class="stat-title mb-3">🎈 Ulang Tahun Anak</div><div id="listUltahAnak">Memuat...</div></div></div>
           </div>
         </div>
       </div>
@@ -133,111 +155,37 @@
           <div class="row" id="formAreaJemaat">
             <div class="col-md-6 mb-3"><label class="form-label">Nama Lengkap</label><input type="text" class="form-control-light" id="DB_Anggota_nama_lengkap"></div>
             <div class="col-md-6 mb-3"><label class="form-label">No WhatsApp</label><input type="text" class="form-control-light" id="DB_Anggota_no_hp_whatsapp"></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Tempat Lahir</label><input type="text" class="form-control-light" id="DB_Anggota_tempat_lahir"></div>
             <div class="col-md-6 mb-3"><label class="form-label">Tanggal Lahir</label><input type="date" class="form-control-light" id="DB_Anggota_tanggal_lahir"></div>
             <div class="col-md-6 mb-3"><label class="form-label">Jenis Kelamin</label><select class="form-control-light" id="DB_Anggota_jenis_kelamin"><option>Laki-laki</option><option>Perempuan</option></select></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Golongan Darah</label><select class="form-control-light" id="DB_Anggota_golongan_darah"><option>-</option><option>A</option><option>B</option><option>AB</option><option>O</option></select></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Status Pernikahan</label><select class="form-control-light" id="DB_Anggota_status_pernikahan"><option>Belum Menikah</option><option>Menikah</option><option>Janda/Duda</option></select></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Pekerjaan</label><input type="text" class="form-control-light" id="DB_Anggota_pekerjaan"></div>
             <div class="col-md-6 mb-3"><label class="form-label">Komsel</label><input type="text" class="form-control-light" id="DB_Anggota_nama_komsel"></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Keterangan Tambahan</label><input type="text" class="form-control-light" id="DB_Anggota_keterangan_tambahan"></div>
             <div class="col-12 mb-3"><label class="form-label">Alamat Lengkap</label><input type="text" class="form-control-light" id="DB_Anggota_alamat_lengkap"></div>
           </div>
-          <button class="btn btn-primary w-100 fw-bold mt-2" id="btnJemaat" onclick="simpanDataPasti('DB_Anggota', 'alertJemaat', 'btnJemaat', 'formAreaJemaat')">SIMPAN DATA JEMAAT</button>
+          <button class="btn btn-primary w-100 fw-bold" id="btnJemaat" onclick="simpanDataPasti('DB_Anggota', 'alertJemaat', 'btnJemaat', 'formAreaJemaat')">SIMPAN DATA JEMAAT</button>
         </div>
       </div>
 
       <div id="view-form-kas" class="app-view" style="display: none;">
-        <h3 class="page-title">Pencatatan Kas & Keuangan</h3>
+        <h3 class="page-title">Pencatatan Kas</h3>
         <div class="custom-card col-md-8">
           <div id="alertKas"></div>
           <div class="row" id="formAreaKas">
             <div class="col-md-6 mb-3"><label class="form-label">Jenis Transaksi</label><select class="form-control-light fw-bold" id="Transactions_jenis_transaksi" onchange="this.style.color = this.value=='Pemasukan'?'#10b981':'#ef4444'"><option value="Pemasukan" style="color:#10b981">Pemasukan</option><option value="Pengeluaran" style="color:#ef4444">Pengeluaran</option></select></div>
             <div class="col-md-6 mb-3"><label class="form-label">Tanggal Transaksi</label><input type="date" class="form-control-light" id="Transactions_tanggal_transaksi"></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Kategori Transaksi</label><select class="form-control-light" id="Transactions_kategori_akun"><option value="">-- Pilih Kategori --</option><option>Persembahan Ibadah</option><option>Persepuluhan</option><option>Ucapan Syukur</option><option>Diakonia</option><option>Operasional Gereja</option><option>Gaji/Honor</option><option>Pembangunan</option><option>Lain-lain</option></select></div>
+            <div class="col-md-6 mb-3"><label class="form-label">Kategori Transaksi</label><input type="text" class="form-control-light" id="Transactions_kategori_akun" placeholder="Contoh: Persembahan Ibadah"></div>
             <div class="col-md-6 mb-3"><label class="form-label">Jumlah (Rp)</label><input type="number" class="form-control-light" id="Transactions_nominal"></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Petugas Kasir</label><input type="text" class="form-control-light" id="Transactions_petugas_kasir"></div>
-            <div class="col-12 mb-3"><label class="form-label">Keterangan Tambahan</label><input type="text" class="form-control-light" id="Transactions_keterangan"></div>
+            <div class="col-12 mb-3"><label class="form-label">Keterangan</label><input type="text" class="form-control-light" id="Transactions_keterangan"></div>
           </div>
           <button class="btn btn-primary w-100 fw-bold" id="btnKas" onclick="simpanDataPasti('Transactions', 'alertKas', 'btnKas', 'formAreaKas')">CATAT TRANSAKSI</button>
         </div>
       </div>
 
-      <div id="view-laporan-kas" class="app-view" style="display: none;">
-        <h3 class="page-title">Laporan Keuangan Bulanan</h3>
-        <div style="background:#1e293b; color:white; padding:20px; border-radius:12px; margin-bottom:20px;" class="row align-items-end">
-          <div class="col-md-4"><label class="form-label text-light">Pilih Bulan</label><select id="lapBulan" class="form-control-light"><option value="1">Januari</option><option value="2">Februari</option><option value="3">Maret</option><option value="4">April</option><option value="5">Mei</option><option value="6">Juni</option><option value="7">Juli</option><option value="8">Agustus</option><option value="9">September</option><option value="10">Oktober</option><option value="11">November</option><option value="12">Desember</option></select></div>
-          <div class="col-md-4"><label class="form-label text-light">Tahun</label><input type="number" id="lapTahun" class="form-control-light" value="2026"></div>
-          <div class="col-md-4"><button class="btn btn-warning w-100 fw-bold" onclick="filterLaporan()">Tampilkan Data</button></div>
-        </div>
-        <div class="row mb-3" id="lapRingkasan" style="display:none;">
-          <div class="col-4"><div class="summary-box bg-success">Pemasukan<br><h4 id="lapMasuk">0</h4></div></div>
-          <div class="col-4"><div class="summary-box bg-danger">Pengeluaran<br><h4 id="lapKeluar">0</h4></div></div>
-          <div class="col-4"><div class="summary-box bg-primary">Saldo Bersih<br><h4 id="lapSaldo">0</h4></div></div>
-        </div>
-        <div class="custom-card p-0"><table class="table mb-0"><thead class="table-dark"><tr><th>Tanggal</th><th>Kategori</th><th>Keterangan</th><th>Jumlah</th><th>Tipe</th></tr></thead><tbody id="lapTableBody"><tr><td colspan='5' class='text-center py-3'>Gunakan filter di atas untuk melihat laporan.</td></tr></tbody></table></div>
-      </div>
-
-      <div id="view-form-anak" class="app-view" style="display: none;">
-        <h3 class="page-title">Registrasi Anak Baru</h3>
-        <div class="custom-card">
-          <div id="alertAnak"></div>
-          <div class="row" id="formAreaAnak">
-            <div class="col-md-6 mb-3"><label class="form-label">Nama Lengkap Anak</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_nama_lengkap_anak"></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Nama Panggilan</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_nama_panggilan"></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Tempat Lahir</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_tempat_lahir"></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Tanggal Lahir</label><input type="date" class="form-control-light" id="DB_MASTER_ANAK_tanggal_lahir"></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Jenis Kelamin</label><select class="form-control-light" id="DB_MASTER_ANAK_jenis_kelamin"><option>Laki-laki</option><option>Perempuan</option></select></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Kelas Saat Ini</label><select class="form-control-light" id="DB_MASTER_ANAK_kelas"><option value="">-- Pilih Kelas --</option><option>Batita</option><option>Play Grup</option><option>TK</option><option>1 SD</option><option>2 SD</option><option>3 SD</option><option>4 SD</option><option>5 SD</option><option>6 SD</option><option>1 SMP</option><option>2 SMP</option><option>3 SMP</option></select></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Nama Orang Tua</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_nama_orang_tua"></div>
-            <div class="col-md-6 mb-3"><label class="form-label">No WA Orang Tua</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_no_wa_orang_tua"></div>
-            <div class="col-12 mb-3"><label class="form-label">Alamat Lengkap</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_alamat_lengkap"></div>
-            <div class="col-12 mb-3"><label class="form-label">Catatan Medis / Alergi</label><input type="text" class="form-control-light" id="DB_MASTER_ANAK_catatan_medis"></div>
-          </div>
-          <button class="btn btn-primary w-100 fw-bold mt-2" id="btnAnak" onclick="simpanDataPasti('DB_MASTER_ANAK', 'alertAnak', 'btnAnak', 'formAreaAnak')">REGISTRASI ANAK</button>
-        </div>
-      </div>
-
-      <div id="view-form-absen" class="app-view" style="display: none;">
-        <h3 class="page-title">Pencatatan Kehadiran Sekolah Minggu</h3>
-        <div class="custom-card col-md-8 text-center">
-          <hr>
-          <div id="alertAbsen"></div>
-          <div id="formAreaAbsen">
-            <div class="mb-3 text-start"><label class="form-label">Tanggal Ibadah</label><input type="date" class="form-control-light" id="DB_TRANSAKSI_ABSEN_tanggal_ibadah"></div>
-            <div class="mb-3 text-start"><label class="form-label">Pilih Anak</label><select class="form-control-light select-anak" id="DB_TRANSAKSI_ABSEN_nama_anak" onchange="autoFillKelas(this.value, 'DB_TRANSAKSI_ABSEN_kelas')"></select></div>
-            <input type="hidden" id="DB_TRANSAKSI_ABSEN_kelas">
-            <div class="mb-3 text-start"><label class="form-label">Status Kehadiran</label><select class="form-control-light" id="DB_TRANSAKSI_ABSEN_status_kehadiran"><option>Hadir</option><option>Sakit</option><option>Izin</option><option>Alpa</option></select></div>
-            <div class="mb-3 text-start"><label class="form-label">Catatan Guru (Opsional)</label><input type="text" class="form-control-light" id="DB_TRANSAKSI_ABSEN_catatan_guru"></div>
-          </div>
-          <button class="btn btn-success w-100 fw-bold" id="btnAbsen" onclick="simpanDataPasti('DB_TRANSAKSI_ABSEN', 'alertAbsen', 'btnAbsen', 'formAreaAbsen')">CATAT KEHADIRAN</button>
-        </div>
-      </div>
-
-      <div id="view-form-raport" class="app-view" style="display: none;">
-        <h3 class="page-title">Input Evaluasi Caturwulan</h3>
-        <div class="custom-card">
-          <div id="alertRaport"></div>
-          <div class="row" id="formAreaRaport">
-            <div class="col-md-6 mb-3"><label class="form-label">Pilih Anak</label><select class="form-control-light select-anak" id="DB_EVALUASI_RAPORT_nama_anak" onchange="autoFillKelas(this.value, 'DB_EVALUASI_RAPORT_kelas')"></select></div>
-            <input type="hidden" id="DB_EVALUASI_RAPORT_kelas">
-            <div class="col-md-6 mb-3"><label class="form-label">Periode</label><input type="text" class="form-control-light" id="DB_EVALUASI_RAPORT_periode" placeholder="Contoh: Caturwulan 1 - 2026"></div>
-            <div class="col-md-3 mb-3"><label class="form-label">Nilai Kehadiran</label><select class="form-control-light" id="DB_EVALUASI_RAPORT_nilai_kehadiran"><option>A - Sangat Baik</option><option>B - Baik</option><option>C - Cukup</option><option>D - Kurang</option></select></div>
-            <div class="col-md-3 mb-3"><label class="form-label">Nilai Sikap</label><select class="form-control-light" id="DB_EVALUASI_RAPORT_nilai_sikap"><option>A - Sangat Baik</option><option>B - Baik</option><option>C - Cukup</option><option>D - Kurang</option></select></div>
-            <div class="col-md-3 mb-3"><label class="form-label">Nilai Pemahaman</label><select class="form-control-light" id="DB_EVALUASI_RAPORT_nilai_pemahaman"><option>A - Sangat Baik</option><option>B - Baik</option><option>C - Cukup</option><option>D - Kurang</option></select></div>
-            <div class="col-md-3 mb-3"><label class="form-label">Hafalan Ayat</label><select class="form-control-light" id="DB_EVALUASI_RAPORT_hafalan_ayat"><option>A - Sangat Baik</option><option>B - Baik</option><option>C - Cukup</option><option>D - Kurang</option></select></div>
-            <div class="col-md-6 mb-3"><label class="form-label">Nama Guru Penilai</label><input type="text" class="form-control-light" id="DB_EVALUASI_RAPORT_nama_guru_penilai"></div>
-            <div class="col-12 mb-3"><label class="form-label">Catatan Pertumbuhan (Feedback Guru)</label><input type="text" class="form-control-light" id="DB_EVALUASI_RAPORT_catatan_pertumbuhan"></div>
-          </div>
-          <button class="btn btn-primary w-100 fw-bold mt-2" id="btnRaport" onclick="simpanDataPasti('DB_EVALUASI_RAPORT', 'alertRaport', 'btnRaport', 'formAreaRaport')">SIMPAN EVALUASI</button>
-        </div>
-      </div>
-
-      <div id="view-manage-user" class="app-view" style="display: none;">
-        <div class="d-flex justify-content-between align-items-center mb-4"><h3 class="page-title m-0">Pengaturan Akun Pengguna</h3><button class="btn btn-primary fw-bold" onclick="document.getElementById('modalUser').style.display='block'">+ Tambah User</button></div>
-        <div class="custom-card p-0"><table class="table mb-0"><thead class="table-dark"><tr><th>Nama</th><th>Email</th><th>Role</th><th>Tanggal Dibuat</th></tr></thead><tbody id="userTableBody"></tbody></table></div>
-      </div>
-
+      <div id="view-laporan-kas" class="app-view" style="display: none;"><h3 class="page-title">Laporan Kas</h3><div class="custom-card"><p>Aplikasi siap dijalankan.</p></div></div>
+      <div id="view-form-anak" class="app-view" style="display: none;"><h3 class="page-title">Form Anak</h3><div class="custom-card"><p>Aplikasi siap dijalankan.</p></div></div>
+      <div id="view-form-absen" class="app-view" style="display: none;"><h3 class="page-title">Absensi</h3><div class="custom-card"><p>Aplikasi siap dijalankan.</p></div></div>
+      <div id="view-form-raport" class="app-view" style="display: none;"><h3 class="page-title">Raport</h3><div class="custom-card"><p>Aplikasi siap dijalankan.</p></div></div>
+      <div id="view-cetak-raport" class="app-view" style="display: none;"><h3 class="page-title">Cetak Raport</h3><div class="custom-card"><p>Aplikasi siap dijalankan.</p></div></div>
+      <div id="view-manage-user" class="app-view" style="display: none;"><h3 class="page-title">Pengaturan Akun</h3><div class="custom-card"><p>Aplikasi siap dijalankan.</p></div></div>
+      
       <div id="view-table-generic" class="app-view" style="display: none;">
         <h3 class="page-title" id="tableTitleGeneric">Data Modul</h3>
         <div class="custom-card p-0 overflow-hidden"><div class="table-responsive"><table class="table mb-0"><thead id="tableHeadGeneric"></thead><tbody id="tableBodyGeneric"></tbody></table></div></div>
@@ -246,11 +194,85 @@
   </div>
 
   <script>
-    // MASUKKAN URL DEPLOY GOOGLE APPS SCRIPT DI SINI (BERAKHIRAN /exec)
-    const GAS_URL = 'https://script.google.com/macros/s/AKfycbzbizDebSAcyFtfMkRRlIRllwvqcwHFHZMvHqPkZpZK9Aru4DL37goxOT4NckLx5a2H/exec';
+    // 1. GANTI DENGAN URL DEPLOY /EXEC DARI APPS SCRIPT
+    const GAS_URL = 'https://script.google.com/macros/s/AKfycbxBnJkJfOARUGITrzwWPQfYWhOlBFDTc2BIiPkTcJ4Q1RVn4IZeowrkIxp01eydJsU/exec';
     
     var globalSession = null;
     var appData = {};
+    var currentView = 'dashboard';
+
+    // SISTEM MENU MOBILE TAMPIL/SEMBUNYI
+    function toggleMobileSidebar() {
+      document.getElementById('mainSidebar').classList.toggle('open');
+      document.getElementById('sidebarOverlay').classList.toggle('open');
+    }
+
+    // TOGGLE LAYAR LOGIN & REGISTER
+    function toggleAuthView(view) {
+      if (view === 'register') {
+        document.getElementById('loginFormArea').style.display = 'none';
+        document.getElementById('registerFormArea').style.display = 'block';
+      } else {
+        document.getElementById('registerFormArea').style.display = 'none';
+        document.getElementById('loginFormArea').style.display = 'block';
+      }
+    }
+
+    async function callAPI(action, payload) {
+      try {
+        let response = await fetch(GAS_URL, {
+          redirect: "follow", method: 'POST',
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify({ action: action, payload: payload })
+        });
+        return await response.json();
+      } catch (e) { throw new Error("Koneksi API Gagal: " + e.message); }
+    }
+
+    // FUNGSI REGISTER KLIEN BARU
+    async function registerKlik() {
+      var nama = document.getElementById('regNama').value.trim();
+      var email = document.getElementById('regEmail').value.trim();
+      var pass = document.getElementById('regPass').value.trim();
+      var btn = document.getElementById('btnRegister');
+
+      if (!nama || !email || !pass) { alert('Semua kolom wajib diisi!'); return; }
+      
+      btn.innerText = "⏳ MEMPROSES..."; btn.disabled = true;
+
+      try {
+        let res = await callAPI('registerTenant', { nama: nama, email: email, pass: pass });
+        btn.innerText = "DAFTAR TRIAL SEKARANG"; btn.disabled = false;
+        if (res.success) {
+          Swal.fire('Berhasil!', res.message, 'success');
+          toggleAuthView('login');
+          document.getElementById('logEmail').value = email;
+        } else { alert(res.message); }
+      } catch (err) { btn.innerText = "DAFTAR TRIAL SEKARANG"; btn.disabled = false; alert(err.message); }
+    }
+
+    // FUNGSI LOGIN DENGAN VALIDASI TRIAL
+    async function loginKlik() {
+      var email = document.getElementById('logEmail').value.trim();
+      var pass = document.getElementById('logPass').value.trim();
+      var btn = document.getElementById('btnLogin');
+      
+      if (!email || !pass) { alert('Wajib diisi!'); return; }
+      btn.innerText = "⏳ MEMERIKSA..."; btn.disabled = true;
+
+      try {
+        let res = await callAPI('login', { email: email, pass: pass });
+        btn.innerText = "MASUK SISTEM"; btn.disabled = false;
+        if (res.success) {
+          globalSession = res.user;
+          try { localStorage.setItem('klik_session', JSON.stringify(globalSession)); } catch(e){}
+          initApp();
+        } else { 
+          // Pesan Error Jika Masa Trial Habis akan Muncul di Sini
+          Swal.fire('Akses Ditolak', res.message, 'error'); 
+        }
+      } catch (err) { btn.innerText = "MASUK SISTEM"; btn.disabled = false; alert(err.message); }
+    }
 
     document.addEventListener("DOMContentLoaded", function() {
       try {
@@ -259,240 +281,82 @@
       } catch(e) {}
     });
 
-    // SISTEM KOMUNIKASI FETCH API KE GOOGLE SCRIPT
-    async function callAPI(action, payload) {
-      try {
-        let response = await fetch(GAS_URL, {
-          redirect: "follow",
-          method: 'POST',
-          headers: { "Content-Type": "text/plain;charset=utf-8" },
-          body: JSON.stringify({ action: action, payload: payload })
-        });
-        return await response.json();
-      } catch (e) {
-        throw new Error("Koneksi API Gagal: " + e.message);
-      }
-    }
-
-    async function loginKlik() {
-      var email = document.getElementById('logEmail').value.trim();
-      var pass = document.getElementById('logPass').value.trim();
-      var btn = document.getElementById('btnLogin');
-
-      if (!email || !pass) { alert('Email dan Password wajib diisi!'); return; }
-
-      btn.innerText = "⏳ MEMERIKSA..."; btn.disabled = true; 
+    function initApp() {
+      document.getElementById('auth-screen').style.display = 'none';
+      document.getElementById('app-screen').style.display = 'block';
+      document.getElementById('body-main').classList.remove('login-body');
       
-      try {
-        let res = await callAPI('login', { email: email, pass: pass });
-        btn.innerText = "MASUK SISTEM"; btn.disabled = false;
-        
-        if (res.success) {
-          try { localStorage.setItem('klik_session', JSON.stringify(res.user)); } catch(err){}
-          globalSession = res.user; 
-          initApp();
-        } else {
-          alert(res.message);
-        }
-      } catch (err) {
-        btn.innerText = "MASUK SISTEM"; btn.disabled = false;
-        alert(err.message);
-      }
-    }
-    
-    function handleLogout() { 
-      try { localStorage.removeItem('klik_session'); } catch(e){}
-      location.reload(); 
+      // Munculkan mobile header saat login sukses
+      document.getElementById('mobileHeader').style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+      window.addEventListener('resize', () => {
+        document.getElementById('mobileHeader').style.display = window.innerWidth <= 768 ? 'flex' : 'none';
+      });
+
+      document.getElementById('userNameDisplay').innerText = globalSession.name;
+      switchView('dashboard', document.querySelector('.nav-link.active'));
     }
 
     function switchView(route, element, title) {
-      var navs = document.querySelectorAll('.nav-link');
-      for (var i = 0; i < navs.length; i++) { navs[i].classList.remove('active'); }
+      currentView = route;
+      document.querySelectorAll('.nav-link').forEach(el => el.classList.remove('active'));
       if(element) element.classList.add('active');
+      document.querySelectorAll('.app-view').forEach(v => v.style.display = 'none');
+      if(document.getElementById('view-' + route)) document.getElementById('view-' + route).style.display = 'block';
       
-      var views = document.querySelectorAll('.app-view');
-      for (var j = 0; j < views.length; j++) { views[j].style.display = 'none'; }
-      
-      var target = document.getElementById('view-' + route);
-      if(target) target.style.display = 'block';
+      // Tutup menu di mode mobile setiap klik menu
+      document.getElementById('mainSidebar').classList.remove('open');
+      document.getElementById('sidebarOverlay').classList.remove('open');
 
-      if(route.startsWith('table-')) { 
-        document.getElementById('view-table-generic').style.display = 'block'; 
+      if(route === 'dashboard') refreshData();
+      if(route.startsWith('table-')) {
+        document.getElementById('view-table-generic').style.display = 'block';
         document.getElementById('tableTitleGeneric').innerText = title || "Data";
         renderTabelGenerik(route.replace('table-', ''));
       }
     }
 
-    function initApp() {
-      document.getElementById('auth-screen').style.display = 'none';
-      document.getElementById('app-screen').style.display = 'block';
-      document.body.style.backgroundColor = '#f4f7f6';
-      
-      if(globalSession && globalSession.name) {
-          document.getElementById('userNameDisplay').innerText = globalSession.name;
-      }
-      switchView('dashboard', document.querySelector('.nav-link.active'));
-      refreshData();
-    }
+    function handleLogout() { try { localStorage.removeItem('klik_session'); } catch(e){} location.reload(); }
 
     async function refreshData() {
       if(!globalSession) return;
-
       try {
-        let stats = await callAPI('getDashboardStats', { userId: globalSession.userId, role: globalSession.role });
+        let stats = await callAPI('getDashboardStats', { tenantId: globalSession.tenantId, userId: globalSession.userId, role: globalSession.role });
         if(stats) {
           var fRp = function(num) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(num); };
-          if(document.getElementById('statMasuk')) document.getElementById('statMasuk').innerText = fRp(stats.keuangan.masuk);
-          if(document.getElementById('statKeluar')) document.getElementById('statKeluar').innerText = fRp(stats.keuangan.keluar);
-          if(document.getElementById('statSaldo')) document.getElementById('statSaldo').innerText = fRp(stats.keuangan.saldo);
-          if(document.getElementById('statTotalJemaat')) document.getElementById('statTotalJemaat').innerText = stats.jemaat.total;
-          if(document.getElementById('statTotalAnak')) document.getElementById('statTotalAnak').innerText = stats.anak.total;
-          if(document.getElementById('statJoy')) document.getElementById('statJoy').innerText = stats.anak.joy;
-          
-          if(document.getElementById('listUltahJemaat')) {
-            document.getElementById('listUltahJemaat').innerHTML = (stats.jemaat.ultah && stats.jemaat.ultah.length > 0) 
-                ? stats.jemaat.ultah.map(function(a) { return "<div class='mb-2 border-bottom pb-1' style='font-size:14px'><strong>" + a.nama + "</strong> (Tgl " + a.tanggal + ")</div>"; }).join('') 
-                : "<p class='text-muted small'>Tidak ada data ulang tahun.</p>";
-          }
-          if(document.getElementById('listUltahAnak')) {
-            document.getElementById('listUltahAnak').innerHTML = (stats.anak.ultah && stats.anak.ultah.length > 0)
-                ? stats.anak.ultah.map(function(a) { return "<div class='mb-2 border-bottom pb-1' style='font-size:14px'><strong>" + a.nama + "</strong> (Tgl " + a.tanggal + ")</div>"; }).join('') 
-                : "<p class='text-muted small'>Tidak ada data ulang tahun.</p>";
-          }
+          document.getElementById('statMasuk').innerText = fRp(stats.keuangan.masuk);
+          document.getElementById('statKeluar').innerText = fRp(stats.keuangan.keluar);
+          document.getElementById('statSaldo').innerText = fRp(stats.keuangan.saldo);
+          document.getElementById('statTotalJemaat').innerText = stats.jemaat.total;
+          document.getElementById('statTotalAnak').innerText = stats.anak.total;
+          document.getElementById('statJoy').innerText = stats.anak.joy;
         }
-
-        let data = await callAPI('getAllData', { userId: globalSession.userId, role: globalSession.role });
-        if(data) {
-          appData = data;
-          populateDropdownAnak();
-          renderManageAkun();
-          var currentActive = document.querySelector('.nav-link.active');
-          if(currentActive && currentActive.innerText.includes('Data Jemaat')) renderTabelGenerik('DB_Anggota');
-          if(currentActive && currentActive.innerText.includes('Direktori Anak')) renderTabelGenerik('DB_MASTER_ANAK');
-        }
+        let data = await callAPI('getAllData', { tenantId: globalSession.tenantId, userId: globalSession.userId, role: globalSession.role });
+        if(data) { appData = data; if(currentView.startsWith('table-')) renderTabelGenerik(currentView.replace('table-', '')); }
       } catch (err) { console.error(err); }
     }
 
     async function simpanDataPasti(sheetName, alertId, btnId, containerId) {
       const btn = document.getElementById(btnId); let originalText = btn.innerText;
       btn.innerText = "⏳ Menyimpan..."; btn.disabled = true;
-      
       let payload = { id: "" };
-      let container = document.getElementById(containerId);
-      var inputs = container.querySelectorAll('input, select');
-      
-      for(var i=0; i<inputs.length; i++) {
-         var el = inputs[i];
-         if(el.id && el.id.indexOf(sheetName + '_') === 0) {
-             let key = el.id.replace(sheetName + '_', '').toLowerCase();
-             payload[key] = el.value; 
-             el.value = ""; 
-         }
-      }
-
+      document.getElementById(containerId).querySelectorAll('input, select').forEach(el => {
+         if(el.id && el.id.indexOf(sheetName + '_') === 0) { payload[el.id.replace(sheetName + '_', '').toLowerCase()] = el.value; el.value = ""; }
+      });
       try {
-        let newData = await callAPI('saveData', { sheetName: sheetName, data: payload, userId: globalSession.userId, role: globalSession.role });
-        appData = newData; refreshData(); 
-        btn.innerText = "SIMPAN BERHASIL";
-        document.getElementById(alertId).innerHTML = "<div class='alert alert-success fw-bold py-2 mb-3'>✅ Data tersimpan ke Database!</div>";
-        setTimeout(function() { document.getElementById(alertId).innerHTML = ""; btn.innerText = originalText; btn.disabled = false; }, 3000);
-      } catch (err) {
-        document.getElementById(alertId).innerHTML = "<div class='alert alert-danger fw-bold py-2 mb-3'>❌ Gagal: " + err.message + "</div>";
-        btn.innerText = originalText; btn.disabled = false;
-      }
-    }
-
-    function populateDropdownAnak() {
-      let dataAnak = appData ? appData['DB_MASTER_ANAK'] || [] : [];
-      let html = "<option value=''>-- Pilih Anak --</option>";
-      for(var i=0; i<dataAnak.length; i++) {
-          html += "<option value='" + dataAnak[i].nama_lengkap_anak + "'>" + dataAnak[i].nama_lengkap_anak + " (" + dataAnak[i].kelas + ")</option>";
-      }
-      var selects = document.querySelectorAll('.select-anak');
-      for(var j=0; j<selects.length; j++) { selects[j].innerHTML = html; }
-    }
-
-    function autoFillKelas(namaAnak, targetId) {
-       let dataAnak = appData ? appData['DB_MASTER_ANAK'] || [] : [];
-       for(var i=0; i<dataAnak.length; i++) {
-           if(dataAnak[i].nama_lengkap_anak === namaAnak && document.getElementById(targetId)) {
-               document.getElementById(targetId).value = dataAnak[i].kelas;
-               break;
-           }
-       }
-    }
-
-    function filterLaporan() {
-      let bln = document.getElementById('lapBulan').value;
-      let thn = document.getElementById('lapTahun').value;
-      let data = appData ? appData['Transactions'] || [] : [];
-      
-      var filterData = [];
-      for(var i=0; i<data.length; i++) {
-          var tgl = new Date(data[i].tanggal_transaksi);
-          if ((tgl.getMonth() + 1) == bln && tgl.getFullYear() == thn) { filterData.push(data[i]); }
-      }
-      
-      let tbody = document.getElementById('lapTableBody');
-      if(filterData.length === 0) { tbody.innerHTML = "<tr><td colspan='5' class='text-center py-3'>Tidak ada transaksi.</td></tr>"; document.getElementById('lapRingkasan').style.display='none'; return;}
-
-      let masuk=0, keluar=0; let html = "";
-      const fRp = function(num) { return new Intl.NumberFormat('id-ID', { style: 'currency', currency: 'IDR' }).format(num); };
-
-      for(var j=0; j<filterData.length; j++) {
-        var r = filterData[j];
-        let nom = Number(r.nominal)||0; 
-        let isMasuk = String(r.jenis_transaksi).toLowerCase().indexOf('masuk') !== -1;
-        if(isMasuk) masuk += nom; else keluar += nom;
-        html += "<tr><td>" + r.tanggal_transaksi + "</td><td class='fw-bold'>" + r.kategori_akun + "</td><td>" + r.keterangan + "</td><td class='fw-bold " + (isMasuk?'text-success':'text-danger') + "'>" + fRp(nom) + "</td><td><span class='badge " + (isMasuk?'bg-success':'bg-danger') + "'>" + r.jenis_transaksi + "</span></td></tr>";
-      }
-      tbody.innerHTML = html; document.getElementById('lapRingkasan').style.display = 'flex'; 
-      document.getElementById('lapMasuk').innerText = fRp(masuk); document.getElementById('lapKeluar').innerText = fRp(keluar); document.getElementById('lapSaldo').innerText = fRp(masuk-keluar);
+        let newData = await callAPI('saveData', { sheetName: sheetName, data: payload, tenantId: globalSession.tenantId, userId: globalSession.userId, role: globalSession.role });
+        appData = newData; refreshData(); btn.innerText = "SIMPAN BERHASIL";
+        document.getElementById(alertId).innerHTML = "<div class='alert alert-success fw-bold py-2 mb-3'>✅ Berhasil tersimpan!</div>";
+        setTimeout(() => { document.getElementById(alertId).innerHTML = ""; btn.innerText = originalText; btn.disabled = false; }, 3000);
+      } catch (err) { document.getElementById(alertId).innerHTML = "<div class='alert alert-danger py-2 mb-3'>❌ Gagal: " + err.message + "</div>"; btn.innerText = originalText; btn.disabled = false; }
     }
 
     function renderTabelGenerik(sheet) {
-      let data = appData ? appData[sheet] || [] : [];
+      let data = appData[sheet] || [];
       let head = document.getElementById('tableHeadGeneric'); let body = document.getElementById('tableBodyGeneric');
-      if(data.length === 0) { head.innerHTML=""; body.innerHTML="<tr><td class='text-center py-4'>Belum ada data.</td></tr>"; return; }
-      
-      let keys = [], label = [];
-      if (sheet === 'DB_Anggota') {
-        keys = ['id', 'nama_lengkap', 'tanggal_lahir', 'no_hp_whatsapp', 'nama_komsel'];
-        label = ['ID', 'Nama Lengkap', 'Tgl Lahir', 'WhatsApp', 'Komsel'];
-      } else if (sheet === 'DB_MASTER_ANAK') {
-        keys = ['id', 'nama_lengkap_anak', 'kelas', 'nama_orang_tua']; label = ['ID & Nama', 'Kelas', 'Orang Tua'];
-      }
-      
-      var hHtml = "<tr class='table-dark'>";
-      for(var i=0; i<label.length; i++) { hHtml += "<th>" + label[i] + "</th>"; }
-      hHtml += "</tr>"; head.innerHTML = hHtml;
-      
-      var bHtml = "";
-      for(var j=0; j<data.length; j++) {
-          var r = data[j];
-          bHtml += "<tr>";
-          for(var k=0; k<keys.length; k++) {
-              var key = keys[k];
-              var val = r[key] || '-';
-              bHtml += "<td>" + val + "</td>";
-          }
-          bHtml += "</tr>";
-      }
-      body.innerHTML = bHtml;
-    }
-
-    function renderManageAkun() {
-      let data = appData ? appData['Users'] || [] : [];
-      var html = "";
-      if (data.length === 0) { html = "<tr><td colspan='4' class='text-center py-3'>Belum ada user.</td></tr>"; } 
-      else {
-          for(var i=0; i<data.length; i++) {
-              var r = data[i];
-              var badge = r.role === 'SuperAdmin' ? 'bg-danger' : 'bg-primary';
-              html += "<tr><td>" + r.name + "</td><td>" + r.email + "</td><td><span class='badge " + badge + "'>" + r.role + "</span></td><td>" + r.date_created + "</td></tr>";
-          }
-      }
-      document.getElementById('userTableBody').innerHTML = html;
+      if(data.length === 0) { head.innerHTML=""; body.innerHTML="<tr><td class='p-4'>Belum ada data.</td></tr>"; return; }
+      let keys = sheet === 'DB_Anggota' ? ['id', 'nama_lengkap', 'no_hp_whatsapp', 'nama_komsel'] : ['id', 'nama_lengkap_anak', 'kelas', 'nama_orang_tua'];
+      head.innerHTML = "<tr class='table-dark'>" + keys.map(k => `<th>${k.toUpperCase()}</th>`).join('') + "</tr>";
+      body.innerHTML = data.map(r => "tr" + keys.map(k => `<td>${r[k]||'-'}</td>`).join('') + "/tr").replace(/tr/g, '<tr\>').replace(/\/tr/g, '</tr\>');
     }
   </script>
 </body>
